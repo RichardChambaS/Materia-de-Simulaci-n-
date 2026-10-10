@@ -1,0 +1,32 @@
+# Entornos virtuales (no se entregan, solo código)
+venv/
+.venv/
+env/
+ENV/
+
+# Python: caché de bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.pytest_cache/
+
+# Java (por si más adelante se añade la versión en Java)
+*.class
+
+# IDE / editores
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivo generado por generar_contexto.py (se regenera, no se versiona)
+CONTEXTO_IA.md
+
+# NOTA IMPORTANTE: python/resultados/ NO se excluye a propósito,
+# porque las gráficas generadas (PNG) sí forman parte de la entrega.

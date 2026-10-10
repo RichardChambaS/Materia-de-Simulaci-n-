@@ -1,0 +1,5 @@
+# Dependencias de la Práctica 01 de Simulación (Python)
+# Instalación:  pip install -r requirements.txt
+# Versiones fijadas (verificadas con Python 3.13):
+numpy==2.5.3
+matplotlib==3.11.2
