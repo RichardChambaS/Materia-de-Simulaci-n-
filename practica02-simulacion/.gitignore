@@ -1,0 +1,30 @@
+# Entorno virtual
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+build/
+dist/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Editores / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs y temporales
+*.log
+*~
+*.tmp
+.~*
+
+# Sistema
+.DS_Store
+Thumbs.db
