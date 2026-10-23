@@ -1,0 +1,289 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{helvet}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=1.18}
+\renewcommand{\familydefault}{\sfdefault}
+\geometry{a4paper,left=2.7cm,right=2.7cm,top=2.55cm,bottom=2.4cm,
+  headheight=1.4cm,headsep=0.45cm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.3em}
+\setlength{\emergencystretch}{2em}
+\setlength{\tabcolsep}{6pt}
+\renewcommand{\arraystretch}{1.15}
+\definecolor{headerblue}{RGB}{19,93,126}
+\definecolor{rowlight}{RGB}{225,240,247}
+\definecolor{sirblue}{RGB}{25,100,185}
+\definecolor{sirred}{RGB}{215,45,55}
+\definecolor{sirgreen}{RGB}{25,145,78}
+\definecolor{netorange}{RGB}{225,125,25}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small UNL -- FEIRNNR -- Carrera de Computación}
+\fancyhead[R]{\small Asignatura: Simulación}
+\renewcommand{\headrulewidth}{0.5pt}
+\fancyfoot[C]{\thepage}
+\titleformat{\section}{\bfseries\fontsize{15}{17}\selectfont}{\thesection.}{0.7em}{}
+\titlespacing*{\section}{0pt}{1.0ex}{0.35ex}
+\titleformat{\subsection}{\bfseries\fontsize{12}{14}\selectfont}{\thesubsection}{0.7em}{}
+\hypersetup{colorlinks=true,linkcolor=headerblue,urlcolor=headerblue}
+\setlist{itemsep=0.2em,topsep=0.2em}
+
+\begin{document}
+\thispagestyle{fancy}
+
+\begin{center}
+{\bfseries\fontsize{22}{26}\selectfont
+Reporte Técnico de Actividades Práctico-Experimentales\\[2pt]
+Práctica Nro. 004\par}
+\vspace{0.3em}
+{\large Análisis comparativo de herramientas de simulación mediante un modelo común\par}
+\end{center}
+
+\section{Datos de identificación del estudiante y la práctica}
+\begin{tabularx}{\textwidth}{|L{0.42\textwidth}|Y|}
+\hline
+\textbf{Estudiante} & Richard Ariel Chamba Santin \\ \hline
+\textbf{Asignatura} & Simulación \\ \hline
+\textbf{Ciclo y unidad} & Quinto ciclo, U1: Introducción a la Simulación \\ \hline
+\textbf{Resultado de aprendizaje} & R1. Aplica análisis estadísticos de los datos de la simulación para mejorar la calidad de los resultados, bajo principios de solidaridad, transparencia, responsabilidad y honestidad. \\ \hline
+\textbf{Práctica} & Nro. 004 \\ \hline
+\textbf{Docente} & José O. Guamán Q. \\ \hline
+\textbf{Fechas que indica la guía} & 22 y 23 de octubre de 2026 \\ \hline
+\textbf{Lugar y tiempo planificado} & Aula; 3 horas \\ \hline
+\end{tabularx}
+
+\section{Objetivos de la práctica}
+El objetivo general de la guía es comparar lenguajes y plataformas para implementar modelos de simulación. Sus objetivos específicos son:
+\begin{enumerate}
+  \item Implementar un modelo sencillo en distintas herramientas.
+  \item Comparar su sintaxis, facilidad de implementación y visualización.
+  \item Identificar el ámbito de aplicación de cada herramienta.
+\end{enumerate}
+En este trabajo se implementó el modelo SIR en Java y NetLogo. La guía también solicita Python con SimPy; esa implementación no forma parte del proyecto entregado y se identifica como alcance pendiente en los resultados.
+
+\section{Materiales y herramientas}
+\begin{itemize}
+  \item Computador con Linux.
+  \item JDK 11 o posterior y NetLogo 7.0.4.
+  \item Editor de código y archivos CSV.
+\end{itemize}
+Java se organiza en Modelo, Vista y Controlador. NetLogo se utiliza para la simulación basada en agentes, la importación de los resultados Java y las gráficas.
+
+\section{Procedimiento y metodología ejecutada}
+
+\subsection{Fundamento del modelo}
+El modelo epidemiológico SIR divide la población en tres grupos: susceptibles ($S$), infectados ($I$) y recuperados ($R$). La población total se conserva:
+\[
+N=S+I+R.
+\]
+La guía presenta las ecuaciones diferenciales $dS/dt=-\beta SI/N$, $dI/dt=\beta SI/N-\gamma I$ y $dR/dt=\gamma I$, además del valor de referencia $R_0=\beta/\gamma=3$. Para esta actividad se utiliza la variante discreta basada en agentes descrita en el procedimiento, en lugar de resolver las ecuaciones diferenciales directamente.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|r|}
+\hline
+\rowcolor{headerblue}\textbf{\textcolor{white}{Parámetro}} & \textbf{\textcolor{white}{Valor}} \\ \hline
+Población total & 100 \\ \hline
+\rowcolor{rowlight}Susceptibles iniciales ($S_0$) & 95 \\ \hline
+Infectados iniciales ($I_0$) & 5 \\ \hline
+\rowcolor{rowlight}Recuperados iniciales ($R_0$) & 0 \\ \hline
+Probabilidad de infección por contacto ($\beta$) & 0.30 \\ \hline
+\rowcolor{rowlight}Probabilidad de recuperación por paso ($\gamma$) & 0.10 \\ \hline
+Tiempo máximo & 100 pasos \\ \hline
+\end{tabular}
+\caption{Parámetros iniciales establecidos en la guía.}
+\label{tab:parametros}
+\end{table}
+
+Para mantener la regla común, en cada paso cada infectado elige al azar una persona distinta de sí mismo. Si al comienzo del paso esa persona es susceptible, ocurre el contagio con probabilidad $\beta$. Cada persona que estaba infectada al comenzar el paso se recupera con probabilidad $\gamma$. Los contactos y recuperaciones se calculan sobre una copia del estado vigente; los cambios se aplican simultáneamente. Así, los nuevos contagios participan en las interacciones a partir del siguiente paso. Los recuperados conservan su estado.
+
+Una persona infectada puede contagiar y recuperarse durante el mismo paso; cada persona solo se cuenta una vez. Los contactos entre infectados distintos pueden coincidir. En Java y NetLogo se usa esta misma regla, una semilla inicial de 42 y un paciente cero: la persona de identificador 0, dentro de los cinco infectados iniciales. El movimiento de las figuras en NetLogo es ilustrativo y no determina la selección de contactos.
+
+\subsection{Secuencia de la simulación}
+\begin{enumerate}
+  \item Inicializar 100 personas: 95 susceptibles, 5 infectadas y ninguna recuperada.
+  \item Identificar a la persona 0 como paciente cero.
+  \item Registrar el conteo inicial en $t=0$.
+  \item Para cada paso de 1 a 100, copiar estados, elegir los contactos de los infectados, aplicar las probabilidades de contagio y recuperación y actualizar los estados a la vez.
+  \item Contar S, I y R al cerrar cada paso.
+  \item Guardar en Java los datos de cada paso y escribir el CSV con encabezado `tiempo,susceptibles,infectados,recuperados'.
+  \item En NetLogo, simular los agentes propios, importar el CSV de Java y comparar las curvas.
+\end{enumerate}
+Los conteos guardados suman 100 en todos los tiempos. Java escribe 101 registros, de $t=0$ a $t=100$. El CSV reúne únicamente los datos necesarios para las gráficas; no contiene las posiciones ni la trayectoria individual de cada persona.
+
+\subsection{Organización e implementación}
+\begin{description}
+  \item[Modelo Java:] las clases `Persona' y `SimulacionSIR' representan estados, parámetros, reglas y conteos.
+  \item[Vista Java:] `VistaConsola' muestra los parámetros y un resumen de los resultados.
+  \item[Controlador Java:] `SimulacionControlador' coordina la ejecución, guarda `resultados_java.csv' y copia el mismo archivo a la carpeta de NetLogo.
+  \item[NetLogo:] `setup' prepara personas y carga el CSV; `go' es continuo y avanza un paso por ejecución. Las personas se mueven despacio y cambian de color según S, I o R. Se pueden ver una curva SIR por plataforma y tres comparaciones separadas, una por estado.
+\end{description}
+El orden de trabajo es ejecutar Java desde la raíz del proyecto y abrir después `netlogo/modelo_sir_netlogo.nlogox'. El CSV se carga al pulsar `setup'; `CARGAR JAVA' permite actualizar la curva tras regenerar el archivo. La pausa visual de 0.10 segundos controla el ritmo observado, no la unidad de tiempo simulada.
+
+\subsection{Herramientas y alcance comparado}
+\begin{table}[h!]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|L{0.26\textwidth}|Y|Y|Y|}
+\hline
+\rowcolor{headerblue}\textbf{\textcolor{white}{Aspecto de la guía}} & \textbf{\textcolor{white}{NetLogo}} & \textbf{\textcolor{white}{Python/SimPy}} & \textbf{\textcolor{white}{Java}} \\ \hline
+Facilidad de implementación & Reglas de agentes se expresan directamente en el modelo. & No implementado en esta entrega. & Requiere representar estados y cambios en clases y arreglos. \\ \hline
+\rowcolor{rowlight}Manejo de agentes & Nativo; cada persona es una tortuga visible. & No implementado. & Cada persona es un objeto Java. \\ \hline
+Generación de datos & Simula su propia serie y carga la de Java. & No implementado. & Produce el CSV de resumen por tiempo. \\ \hline
+\rowcolor{rowlight}Visualización & Movimiento y gráficas en el mismo entorno. & No implementado. & Resumen textual; el CSV se representa en NetLogo. \\ \hline
+Flexibilidad & Adecuado para modificar interacciones y observar agentes. & No evaluado. & Permite separar reglas y coordinación con MVC. \\ \hline
+\rowcolor{rowlight}Ejecución e integración & Integra curvas del CSV y ejecución propia. & Sin dato experimental. & CSV sencillo para intercambiar resultados con NetLogo. \\ \hline
+\end{tabularx}
+\caption{Comparación basada en lo implementado. No se incluyen mediciones para Python/SimPy porque no se ejecutó esa versión.}
+\label{tab:herramientas}
+\end{table}
+
+\section{Resultados esperados}
+La guía espera que al terminar se disponga de modelos SIR en NetLogo, Python/SimPy y Java; CSV de Python y Java; gráficas de S, I y R; visualización de los datos en NetLogo; comparación de resultados; y análisis de las ventajas y limitaciones de las herramientas, prestando atención al azar. En el alcance de este trabajo se generó el modelo Java y NetLogo, el CSV de Java, las cinco gráficas de NetLogo y la comparación Java--NetLogo. El modelo Python y su CSV no se generaron, por lo que esa parte de los resultados esperados permanece pendiente.
+
+\section{Resultados obtenidos}
+El CSV de Java contiene las series de S, I y R para los 101 tiempos. Con la semilla 42, el máximo de infectados en la corrida Java fue 29 en $t=31$. En $t=100$ se registraron 13 susceptibles, 0 infectados y 87 recuperados. En la ejecución de NetLogo 7.0.4 con la misma regla y semilla, el máximo fue 44 en $t=11$; al tiempo 100 había 8 susceptibles, 0 infectados y 92 recuperados.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|r|r|}
+\hline
+\rowcolor{headerblue}\textbf{\textcolor{white}{Medida}} & \textbf{\textcolor{white}{Java}} & \textbf{\textcolor{white}{NetLogo}} \\ \hline
+Máximo número de infectados & 29 & 44 \\ \hline
+\rowcolor{rowlight}Primer tiempo en el máximo & 31 & 11 \\ \hline
+Susceptibles al tiempo 100 & 13 & 8 \\ \hline
+\rowcolor{rowlight}Infectados al tiempo 100 & 0 & 0 \\ \hline
+Recuperados al tiempo 100 & 87 & 92 \\ \hline
+\end{tabular}
+\caption{Resumen de una ejecución por herramienta.}
+\label{tab:resumen}
+\end{table}
+
+Estas cifras son resultados de una corrida por herramienta. No representan promedios de réplicas ni permiten estimar intervalos de confianza. Aunque se fijó la misma semilla numérica, los generadores aleatorios de Java y NetLogo producen secuencias distintas; la semilla permite repetir cada implementación, no sincronizar ambas.
+
+\subsection{Gráficas de resultados}
+Las gráficas siguientes muestran las series generadas por las dos implementaciones para una ejecución con semilla 42. En las tres últimas se compara el mismo estado entre herramientas. La escala vertical indica cantidad de personas y la horizontal, el paso de tiempo.
+\newcommand{\siraxis}{\begin{axis}[width=0.9\textwidth,height=6.2cm,xmin=0,xmax=100,ymin=0,ymax=100,xlabel={Tiempo},ylabel={Personas},xtick={0,20,40,60,80,100},ytick={0,20,40,60,80,100},grid=major,legend style={at={(0.5,-0.22)},anchor=north,legend columns=3},tick label style={font=\small}]}
+\newcommand{\comparaxis}{\begin{axis}[width=0.9\textwidth,height=6.2cm,xmin=0,xmax=100,ymin=0,ymax=100,xlabel={Tiempo},ylabel={Personas},xtick={0,20,40,60,80,100},ytick={0,20,40,60,80,100},grid=major,legend style={at={(0.5,-0.22)},anchor=north,legend columns=2},tick label style={font=\small}]}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}\siraxis
+\addplot[color=sirblue,line width=1.1pt] coordinates {(0,95) (1,92) (2,91) (3,90) (4,88) (5,88) (6,85) (7,82) (8,81) (9,80) (10,78) (11,76) (12,71) (13,69) (14,68) (15,65) (16,62) (17,58) (18,55) (19,51) (20,49) (21,47) (22,44) (23,43) (24,40) (25,37) (26,35) (27,29) (28,27) (29,27) (30,25) (31,22) (32,21) (33,20) (34,20) (35,20) (36,18) (37,17) (38,17) (39,16) (40,16) (41,16) (42,16) (43,16) (44,16) (45,16) (46,16) (47,15) (48,15) (49,15) (50,14) (51,14) (52,14) (53,14) (54,14) (55,13) (56,13) (57,13) (58,13) (59,13) (60,13) (61,13) (62,13) (63,13) (64,13) (65,13) (66,13) (67,13) (68,13) (69,13) (70,13) (71,13) (72,13) (73,13) (74,13) (75,13) (76,13) (77,13) (78,13) (79,13) (80,13) (81,13) (82,13) (83,13) (84,13) (85,13) (86,13) (87,13) (88,13) (89,13) (90,13) (91,13) (92,13) (93,13) (94,13) (95,13) (96,13) (97,13) (98,13) (99,13) (100,13)}; \addlegendentry{S}
+\addplot[color=sirred,line width=1.1pt] coordinates {(0,5) (1,7) (2,6) (3,7) (4,9) (5,9) (6,10) (7,12) (8,12) (9,9) (10,11) (11,13) (12,17) (13,18) (14,17) (15,20) (16,20) (17,23) (18,23) (19,26) (20,27) (21,27) (22,26) (23,25) (24,25) (25,26) (26,28) (27,27) (28,28) (29,27) (30,28) (31,29) (32,25) (33,25) (34,20) (35,18) (36,19) (37,17) (38,17) (39,16) (40,15) (41,10) (42,9) (43,9) (44,8) (45,8) (46,8) (47,9) (48,7) (49,6) (50,6) (51,4) (52,3) (53,3) (54,3) (55,3) (56,3) (57,3) (58,2) (59,2) (60,2) (61,2) (62,2) (63,1) (64,1) (65,1) (66,1) (67,1) (68,1) (69,1) (70,1) (71,1) (72,1) (73,1) (74,1) (75,1) (76,1) (77,0) (78,0) (79,0) (80,0) (81,0) (82,0) (83,0) (84,0) (85,0) (86,0) (87,0) (88,0) (89,0) (90,0) (91,0) (92,0) (93,0) (94,0) (95,0) (96,0) (97,0) (98,0) (99,0) (100,0)}; \addlegendentry{I}
+\addplot[color=sirgreen,line width=1.1pt] coordinates {(0,0) (1,1) (2,3) (3,3) (4,3) (5,3) (6,5) (7,6) (8,7) (9,11) (10,11) (11,11) (12,12) (13,13) (14,15) (15,15) (16,18) (17,19) (18,22) (19,23) (20,24) (21,26) (22,30) (23,32) (24,35) (25,37) (26,37) (27,44) (28,45) (29,46) (30,47) (31,49) (32,54) (33,55) (34,60) (35,62) (36,63) (37,66) (38,66) (39,68) (40,69) (41,74) (42,75) (43,75) (44,76) (45,76) (46,76) (47,76) (48,78) (49,79) (50,80) (51,82) (52,83) (53,83) (54,83) (55,84) (56,84) (57,84) (58,85) (59,85) (60,85) (61,85) (62,85) (63,86) (64,86) (65,86) (66,86) (67,86) (68,86) (69,86) (70,86) (71,86) (72,86) (73,86) (74,86) (75,86) (76,86) (77,87) (78,87) (79,87) (80,87) (81,87) (82,87) (83,87) (84,87) (85,87) (86,87) (87,87) (88,87) (89,87) (90,87) (91,87) (92,87) (93,87) (94,87) (95,87) (96,87) (97,87) (98,87) (99,87) (100,87)}; \addlegendentry{R}
+\end{axis}\end{tikzpicture}
+\caption{Evolución de S, I y R calculada por Java. La curva I alcanza el máximo de 29 personas en $t=31$.}
+\label{fig:java}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}\siraxis
+\addplot[color=sirblue,line width=1.1pt] coordinates {(0,95) (1,92) (2,90) (3,87) (4,84) (5,81) (6,75) (7,71) (8,65) (9,57) (10,54) (11,44) (12,38) (13,36) (14,30) (15,26) (16,23) (17,22) (18,18) (19,16) (20,14) (21,13) (22,11) (23,11) (24,11) (25,11) (26,9) (27,9) (28,8) (29,8) (30,8) (31,8) (32,8) (33,8) (34,8) (35,8) (36,8) (37,8) (38,8) (39,8) (40,8) (41,8) (42,8) (43,8) (44,8) (45,8) (46,8) (47,8) (48,8) (49,8) (50,8) (51,8) (52,8) (53,8) (54,8) (55,8) (56,8) (57,8) (58,8) (59,8) (60,8) (61,8) (62,8) (63,8) (64,8) (65,8) (66,8) (67,8) (68,8) (69,8) (70,8) (71,8) (72,8) (73,8) (74,8) (75,8) (76,8) (77,8) (78,8) (79,8) (80,8) (81,8) (82,8) (83,8) (84,8) (85,8) (86,8) (87,8) (88,8) (89,8) (90,8) (91,8) (92,8) (93,8) (94,8) (95,8) (96,8) (97,8) (98,8) (99,8) (100,8)}; \addlegendentry{S}
+\addplot[color=sirred,line width=1.1pt] coordinates {(0,5) (1,7) (2,9) (3,11) (4,12) (5,15) (6,19) (7,22) (8,28) (9,34) (10,36) (11,44) (12,44) (13,38) (14,40) (15,42) (16,39) (17,37) (18,39) (19,36) (20,36) (21,34) (22,36) (23,30) (24,28) (25,25) (26,27) (27,23) (28,19) (29,16) (30,14) (31,12) (32,9) (33,8) (34,7) (35,7) (36,7) (37,7) (38,7) (39,6) (40,6) (41,5) (42,4) (43,3) (44,3) (45,3) (46,3) (47,2) (48,1) (49,1) (50,1) (51,1) (52,1) (53,1) (54,1) (55,0) (56,0) (57,0) (58,0) (59,0) (60,0) (61,0) (62,0) (63,0) (64,0) (65,0) (66,0) (67,0) (68,0) (69,0) (70,0) (71,0) (72,0) (73,0) (74,0) (75,0) (76,0) (77,0) (78,0) (79,0) (80,0) (81,0) (82,0) (83,0) (84,0) (85,0) (86,0) (87,0) (88,0) (89,0) (90,0) (91,0) (92,0) (93,0) (94,0) (95,0) (96,0) (97,0) (98,0) (99,0) (100,0)}; \addlegendentry{I}
+\addplot[color=sirgreen,line width=1.1pt] coordinates {(0,0) (1,1) (2,1) (3,2) (4,4) (5,4) (6,6) (7,7) (8,7) (9,9) (10,10) (11,12) (12,18) (13,26) (14,30) (15,32) (16,38) (17,41) (18,43) (19,48) (20,50) (21,53) (22,53) (23,59) (24,61) (25,64) (26,64) (27,68) (28,73) (29,76) (30,78) (31,80) (32,83) (33,84) (34,85) (35,85) (36,85) (37,85) (38,85) (39,86) (40,86) (41,87) (42,88) (43,89) (44,89) (45,89) (46,89) (47,90) (48,91) (49,91) (50,91) (51,91) (52,91) (53,91) (54,91) (55,92) (56,92) (57,92) (58,92) (59,92) (60,92) (61,92) (62,92) (63,92) (64,92) (65,92) (66,92) (67,92) (68,92) (69,92) (70,92) (71,92) (72,92) (73,92) (74,92) (75,92) (76,92) (77,92) (78,92) (79,92) (80,92) (81,92) (82,92) (83,92) (84,92) (85,92) (86,92) (87,92) (88,92) (89,92) (90,92) (91,92) (92,92) (93,92) (94,92) (95,92) (96,92) (97,92) (98,92) (99,92) (100,92)}; \addlegendentry{R}
+\end{axis}\end{tikzpicture}
+\caption{Evolución de S, I y R generada por NetLogo con los mismos parámetros. I alcanza un máximo de 44 en $t=11$.}
+\label{fig:netlogo}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}\comparaxis
+\addplot[color=sirblue,line width=1.1pt] coordinates {(0,95) (1,92) (2,91) (3,90) (4,88) (5,88) (6,85) (7,82) (8,81) (9,80) (10,78) (11,76) (12,71) (13,69) (14,68) (15,65) (16,62) (17,58) (18,55) (19,51) (20,49) (21,47) (22,44) (23,43) (24,40) (25,37) (26,35) (27,29) (28,27) (29,27) (30,25) (31,22) (32,21) (33,20) (34,20) (35,20) (36,18) (37,17) (38,17) (39,16) (40,16) (41,16) (42,16) (43,16) (44,16) (45,16) (46,16) (47,15) (48,15) (49,15) (50,14) (51,14) (52,14) (53,14) (54,14) (55,13) (56,13) (57,13) (58,13) (59,13) (60,13) (61,13) (62,13) (63,13) (64,13) (65,13) (66,13) (67,13) (68,13) (69,13) (70,13) (71,13) (72,13) (73,13) (74,13) (75,13) (76,13) (77,13) (78,13) (79,13) (80,13) (81,13) (82,13) (83,13) (84,13) (85,13) (86,13) (87,13) (88,13) (89,13) (90,13) (91,13) (92,13) (93,13) (94,13) (95,13) (96,13) (97,13) (98,13) (99,13) (100,13)}; \addlegendentry{Java}
+\addplot[color=netorange,dashed,line width=1.1pt] coordinates {(0,95) (1,92) (2,90) (3,87) (4,84) (5,81) (6,75) (7,71) (8,65) (9,57) (10,54) (11,44) (12,38) (13,36) (14,30) (15,26) (16,23) (17,22) (18,18) (19,16) (20,14) (21,13) (22,11) (23,11) (24,11) (25,11) (26,9) (27,9) (28,8) (29,8) (30,8) (31,8) (32,8) (33,8) (34,8) (35,8) (36,8) (37,8) (38,8) (39,8) (40,8) (41,8) (42,8) (43,8) (44,8) (45,8) (46,8) (47,8) (48,8) (49,8) (50,8) (51,8) (52,8) (53,8) (54,8) (55,8) (56,8) (57,8) (58,8) (59,8) (60,8) (61,8) (62,8) (63,8) (64,8) (65,8) (66,8) (67,8) (68,8) (69,8) (70,8) (71,8) (72,8) (73,8) (74,8) (75,8) (76,8) (77,8) (78,8) (79,8) (80,8) (81,8) (82,8) (83,8) (84,8) (85,8) (86,8) (87,8) (88,8) (89,8) (90,8) (91,8) (92,8) (93,8) (94,8) (95,8) (96,8) (97,8) (98,8) (99,8) (100,8)}; \addlegendentry{NetLogo}
+\end{axis}\end{tikzpicture}
+\caption{Comparación de susceptibles $S(t)$ entre Java y NetLogo.}
+\label{fig:comparacion-s}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}\comparaxis
+\addplot[color=sirred,line width=1.1pt] coordinates {(0,5) (1,7) (2,6) (3,7) (4,9) (5,9) (6,10) (7,12) (8,12) (9,9) (10,11) (11,13) (12,17) (13,18) (14,17) (15,20) (16,20) (17,23) (18,23) (19,26) (20,27) (21,27) (22,26) (23,25) (24,25) (25,26) (26,28) (27,27) (28,28) (29,27) (30,28) (31,29) (32,25) (33,25) (34,20) (35,18) (36,19) (37,17) (38,17) (39,16) (40,15) (41,10) (42,9) (43,9) (44,8) (45,8) (46,8) (47,9) (48,7) (49,6) (50,6) (51,4) (52,3) (53,3) (54,3) (55,3) (56,3) (57,3) (58,2) (59,2) (60,2) (61,2) (62,2) (63,1) (64,1) (65,1) (66,1) (67,1) (68,1) (69,1) (70,1) (71,1) (72,1) (73,1) (74,1) (75,1) (76,1) (77,0) (78,0) (79,0) (80,0) (81,0) (82,0) (83,0) (84,0) (85,0) (86,0) (87,0) (88,0) (89,0) (90,0) (91,0) (92,0) (93,0) (94,0) (95,0) (96,0) (97,0) (98,0) (99,0) (100,0)}; \addlegendentry{Java}
+\addplot[color=netorange,dashed,line width=1.1pt] coordinates {(0,5) (1,7) (2,9) (3,11) (4,12) (5,15) (6,19) (7,22) (8,28) (9,34) (10,36) (11,44) (12,44) (13,38) (14,40) (15,42) (16,39) (17,37) (18,39) (19,36) (20,36) (21,34) (22,36) (23,30) (24,28) (25,25) (26,27) (27,23) (28,19) (29,16) (30,14) (31,12) (32,9) (33,8) (34,7) (35,7) (36,7) (37,7) (38,7) (39,6) (40,6) (41,5) (42,4) (43,3) (44,3) (45,3) (46,3) (47,2) (48,1) (49,1) (50,1) (51,1) (52,1) (53,1) (54,1) (55,0) (56,0) (57,0) (58,0) (59,0) (60,0) (61,0) (62,0) (63,0) (64,0) (65,0) (66,0) (67,0) (68,0) (69,0) (70,0) (71,0) (72,0) (73,0) (74,0) (75,0) (76,0) (77,0) (78,0) (79,0) (80,0) (81,0) (82,0) (83,0) (84,0) (85,0) (86,0) (87,0) (88,0) (89,0) (90,0) (91,0) (92,0) (93,0) (94,0) (95,0) (96,0) (97,0) (98,0) (99,0) (100,0)}; \addlegendentry{NetLogo}
+\end{axis}\end{tikzpicture}
+\caption{Comparación de infectados $I(t)$ entre Java y NetLogo.}
+\label{fig:comparacion-i}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}\comparaxis
+\addplot[color=sirgreen,line width=1.1pt] coordinates {(0,0) (1,1) (2,3) (3,3) (4,3) (5,3) (6,5) (7,6) (8,7) (9,11) (10,11) (11,11) (12,12) (13,13) (14,15) (15,15) (16,18) (17,19) (18,22) (19,23) (20,24) (21,26) (22,30) (23,32) (24,35) (25,37) (26,37) (27,44) (28,45) (29,46) (30,47) (31,49) (32,54) (33,55) (34,60) (35,62) (36,63) (37,66) (38,66) (39,68) (40,69) (41,74) (42,75) (43,75) (44,76) (45,76) (46,76) (47,76) (48,78) (49,79) (50,80) (51,82) (52,83) (53,83) (54,83) (55,84) (56,84) (57,84) (58,85) (59,85) (60,85) (61,85) (62,85) (63,86) (64,86) (65,86) (66,86) (67,86) (68,86) (69,86) (70,86) (71,86) (72,86) (73,86) (74,86) (75,86) (76,86) (77,87) (78,87) (79,87) (80,87) (81,87) (82,87) (83,87) (84,87) (85,87) (86,87) (87,87) (88,87) (89,87) (90,87) (91,87) (92,87) (93,87) (94,87) (95,87) (96,87) (97,87) (98,87) (99,87) (100,87)}; \addlegendentry{Java}
+\addplot[color=netorange,dashed,line width=1.1pt] coordinates {(0,0) (1,1) (2,1) (3,2) (4,4) (5,4) (6,6) (7,7) (8,7) (9,9) (10,10) (11,12) (12,18) (13,26) (14,30) (15,32) (16,38) (17,41) (18,43) (19,48) (20,50) (21,53) (22,53) (23,59) (24,61) (25,64) (26,64) (27,68) (28,73) (29,76) (30,78) (31,80) (32,83) (33,84) (34,85) (35,85) (36,85) (37,85) (38,85) (39,86) (40,86) (41,87) (42,88) (43,89) (44,89) (45,89) (46,89) (47,90) (48,91) (49,91) (50,91) (51,91) (52,91) (53,91) (54,91) (55,92) (56,92) (57,92) (58,92) (59,92) (60,92) (61,92) (62,92) (63,92) (64,92) (65,92) (66,92) (67,92) (68,92) (69,92) (70,92) (71,92) (72,92) (73,92) (74,92) (75,92) (76,92) (77,92) (78,92) (79,92) (80,92) (81,92) (82,92) (83,92) (84,92) (85,92) (86,92) (87,92) (88,92) (89,92) (90,92) (91,92) (92,92) (93,92) (94,92) (95,92) (96,92) (97,92) (98,92) (99,92) (100,92)}; \addlegendentry{NetLogo}
+\end{axis}\end{tikzpicture}
+\caption{Comparación de recuperados $R(t)$ entre Java y NetLogo.}
+\label{fig:comparacion-r}
+\end{figure}
+
+\subsection{Análisis de las gráficas}
+\begin{enumerate}
+  \item \textbf{Evolución SIR de Java.} Los susceptibles disminuyen de 95 a 13 y los recuperados aumentan de 0 a 87. Los infectados llegan a un máximo de 29 en el paso 31 y después disminuyen hasta cero en el paso 77. La forma de las curvas es la esperada para un SIR sin reinfección: S desciende, I primero crece y luego cae, y R solo aumenta.
+  \item \textbf{Evolución SIR de NetLogo.} La población empieza en 95, 5 y 0. En esta corrida I alcanza 44 en el paso 11 y llega a cero antes del paso 100; al final se observa 8, 0 y 92. La curva de infectados alcanza su máximo antes y más alto que en Java. La forma de los agentes en movimiento ayuda a relacionar el estado individual con las curvas agregadas.
+  \item \textbf{Comparación de S.} Ambas curvas descienden con el tiempo y terminan en cero contagios activos, aunque la trayectoria de Java termina con 13 susceptibles y la de NetLogo con 8. Esa diferencia corresponde a una ejecución aleatoria y a la dinámica de contactos, no a un cambio de los valores de $\beta$ o $\gamma$.
+  \item \textbf{Comparación de I.} Las dos series parten de cinco infectados y llegan a cero; Java alcanza 29 en $t=31$, mientras que NetLogo alcanza 44 en $t=11$. La forma del pico es la diferencia más visible entre las herramientas. Con una sola corrida no se puede concluir que una implementación tenga sistemáticamente más contagios: sería necesario comparar varias corridas independientes y sus promedios y dispersión.
+  \item \textbf{Comparación de R.} Las curvas empiezan en cero y crecen de forma acumulativa, porque no hay reinfección ni salida del estado recuperado. NetLogo registra 92 recuperados al final frente a 87 en Java; ambos resultados son compatibles con que al cierre ya no quedaban infectados.
+\end{enumerate}
+La comparación visual sirve para explicar una diferencia concreta entre simulaciones con la misma regla. El uso de una sola semilla por implementación es una limitación del análisis estadístico de esta entrega: para generalizar la diferencia de los picos se deberían ejecutar réplicas con varias semillas y comparar medias y desviaciones.
+
+\section{Preguntas de control}
+\begin{enumerate}
+  \item \textbf{¿Qué representa el modelo SIR?} Representa la evolución de una población expuesta a una infección, organizada en susceptibles, infectados y recuperados.
+  \item \textbf{¿Qué representan S, I y R?} S cuenta a quienes aún pueden infectarse; I, a quienes tienen la infección y pueden transmitirla; R, a quienes ya se recuperaron y no vuelven a infectarse en este modelo.
+  \item \textbf{¿Qué función cumplen $\beta$ y $\gamma$?} $\beta=0.30$ es la probabilidad de contagio cuando un infectado contacta a un susceptible. $\gamma=0.10$ es la probabilidad de que cada infectado se recupere en un paso.
+  \item \textbf{¿Por qué es importante usar los mismos parámetros en las tres herramientas?} Para que una diferencia observada se deba a la implementación o al azar y no a que se configuró otra población, tasa o duración. Esta entrega compara Java y NetLogo; no incluye Python.
+  \item \textbf{¿Por qué pueden diferir los resultados de Python, Java y NetLogo con el mismo modelo?} Cada herramienta puede utilizar un generador y una secuencia de números aleatorios distintos. También puede diferir el orden de actualización de los agentes. La regla debe mantenerse igual, pero las trayectorias de una corrida no tienen que coincidir.
+  \item \textbf{¿Qué ventajas ofrece NetLogo para sistemas basados en agentes?} Incluye agentes y espacio visual en el mismo entorno, permite observar su movimiento y estados, y facilita vincular las reglas individuales con los conteos agregados.
+  \item \textbf{¿Qué ventajas ofrece SimPy para simulaciones basadas en eventos?} Permite modelar procesos que esperan y se reanudan ante eventos, y administra el calendario de eventos discretos. No se implementó SimPy en este trabajo.
+  \item \textbf{¿Qué ventajas ofrece Java para implementar modelos de simulación?} Permite organizar el programa en clases, definir los estados de las personas de forma explícita y controlar con precisión la generación de números aleatorios y la escritura del CSV.
+  \item \textbf{¿Qué función cumple el CSV en la integración Python/Java hacia NetLogo?} Transporta columnas de tiempo, S, I y R para que NetLogo grafique datos generados fuera de esa herramienta. Aquí se usa el archivo producido por Java.
+  \item \textbf{¿Qué ventajas presenta separar la generación de datos de la visualización?} Facilita cambiar o repetir la simulación sin reescribir las gráficas, reutilizar los mismos datos en distintas herramientas y comprobar lo que se transmite mediante un archivo simple.
+\end{enumerate}
+
+\section{Conclusiones}
+\begin{enumerate}
+  \item Java implementó el SIR discreto con los valores iniciales y parámetros de la ficha, en una estructura MVC sencilla, y produjo una serie CSV que NetLogo puede importar.
+  \item NetLogo mostró los estados individuales en movimiento y las tendencias de S, I y R, tanto para su propia ejecución como para los datos de Java. La separación entre movimiento ilustrativo y selección de contactos mantiene clara la regla aplicada.
+  \item La comparación de una corrida mostró picos distintos (29 en Java y 44 en NetLogo), pese a usar la misma regla y los mismos parámetros. Esto ilustra el efecto de las secuencias aleatorias y también la necesidad de réplicas para un análisis estadístico más sólido.
+  \item La práctica se cumplió parcialmente respecto del objetivo de comparar varias plataformas: no se implementó Python/SimPy. Una comparación completa de las tres herramientas requiere generar su CSV, añadir su serie a NetLogo y repetir el análisis.
+\end{enumerate}
+
+\section{Declaración de uso de inteligencia artificial}
+Se utilizó ChatGPT/Codex como apoyo para organizar la estructura de este borrador, explicar los requisitos de la ficha, redactar versiones iniciales de la metodología y las respuestas de control, y proponer un prompt general para documentar ese apoyo. El código Java y NetLogo se ejecutó para obtener los valores reportados y se contrastaron los conteos con la conservación de la población. La interpretación, revisión final y responsabilidad académica del informe corresponden al estudiante. La herramienta no reemplaza la revisión de la ficha ni la explicación del modelo durante la defensa.
+
+\subsection*{Prompt general representativo}
+El siguiente texto resume el contexto de las instrucciones dadas. Es un prompt representativo redactado para esta declaración; no se presenta como transcripción literal de toda la conversación:
+\begin{quote}\small
+Revisa la guía de la práctica y el proyecto existente de simulación SIR. Conserva la organización y el formato usados en las prácticas anteriores. Redacta un borrador de metodología, resultados, análisis de las gráficas y respuestas a las preguntas de control, basándote en los parámetros, el código y los datos realmente disponibles. Explica el papel de S, I, R, beta y gamma; describe la simulación discreta por agentes y la integración CSV de Java con NetLogo. Distingue los resultados ejecutados de los requisitos que no se implementaron, identifica las limitaciones del análisis aleatorio y no inventes cifras ni evidencias. Incluye una declaración transparente de uso de IA y un prompt general representativo.\end{quote}
+
+\section{Bibliografía}
+\begin{thebibliography}{9}
+\bibitem{guia} Guamán Q., J. O. (2026). \emph{Guía de Actividades Práctico-Experimentales Nro. 004: Análisis comparativo de herramientas de simulación mediante un modelo común}. FEIRNNR, Carrera de Computación.
+\bibitem{netlogo} Wilensky, U. (1999). \emph{NetLogo}. Center for Connected Learning and Computer-Based Modeling, Northwestern University. \url{https://www.netlogo.org/}
+\bibitem{java} Oracle. (2024). \emph{Java Platform, Standard Edition Documentation}. \url{https://docs.oracle.com/en/java/}
+\end{thebibliography}
+
+\end{document}
