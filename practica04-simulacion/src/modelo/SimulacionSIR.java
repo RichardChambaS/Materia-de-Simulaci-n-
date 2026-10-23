@@ -12,7 +12,7 @@ public class SimulacionSIR {
     public static final double BETA = 0.30;
     public static final double GAMMA = 0.10;
     public static final int TIEMPO_SIMULACION = 100;
-    public static final long SEMILLA = 100;
+    public static final long SEMILLA = 35;
 
     // Crea la población y registra los resultados desde el tiempo 0 hasta el final.
     public List<int[]> ejecutar() {
