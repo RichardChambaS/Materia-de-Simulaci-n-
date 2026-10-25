@@ -28,5 +28,6 @@ public class VistaConsola {
         System.out.printf("Tiempo de cálculo (sin escribir archivos): %.6f s%n", segundos);
         System.out.println("CSV: resultados/resultados_java.csv");
         System.out.println("Copia para NetLogo: netlogo/resultados_java.csv");
+        System.out.println("Parámetros para NetLogo: netlogo/parametros_java.csv");
     }
 }

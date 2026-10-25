@@ -1,0 +1,21 @@
+PRÁCTICA 04 - MODELO SIR EN JAVA
+Población: 100 | Infectados iniciales: 5
+Beta: 0.30 | Gamma: 0.10 | Pasos: 100 | Semilla: 42
+S: susceptibles | I: infectados | R: recuperados
+Tiempo      S      I      R
+     0     95      5      0
+    10     78     11     11
+    20     49     27     24
+    30     25     28     47
+    40     16     15     69
+    50     14      6     80
+    60     13      2     85
+    70     13      1     86
+    80     13      0     87
+    90     13      0     87
+   100     13      0     87
+Máximo de infectados: 29 en el tiempo 31.
+Tiempo de cálculo (sin escribir archivos): 0.002528 s
+CSV: resultados/resultados_java.csv
+Copia para NetLogo: netlogo/resultados_java.csv
+Parámetros para NetLogo: netlogo/parametros_java.csv

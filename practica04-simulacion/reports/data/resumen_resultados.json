@@ -1,0 +1,46 @@
+{
+  "resultados_java.csv": {
+    "pico_i": 29,
+    "tiempo_pico": 31,
+    "primer_tiempo_sin_infectados": 77,
+    "estado_final": {
+      "tiempo": 100,
+      "susceptibles": 13,
+      "infectados": 0,
+      "recuperados": 87
+    }
+  },
+  "resultados_netlogo.csv": {
+    "pico_i": 44,
+    "tiempo_pico": 11,
+    "primer_tiempo_sin_infectados": 55,
+    "estado_final": {
+      "tiempo": 100,
+      "susceptibles": 8,
+      "infectados": 0,
+      "recuperados": 92
+    }
+  },
+  "gamma040_java.csv": {
+    "pico_i": 6,
+    "tiempo_pico": 1,
+    "primer_tiempo_sin_infectados": 9,
+    "estado_final": {
+      "tiempo": 100,
+      "susceptibles": 89,
+      "infectados": 0,
+      "recuperados": 11
+    }
+  },
+  "gamma040_netlogo.csv": {
+    "pico_i": 5,
+    "tiempo_pico": 0,
+    "primer_tiempo_sin_infectados": 6,
+    "estado_final": {
+      "tiempo": 100,
+      "susceptibles": 89,
+      "infectados": 0,
+      "recuperados": 11
+    }
+  }
+}

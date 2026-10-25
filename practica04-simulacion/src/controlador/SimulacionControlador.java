@@ -21,11 +21,31 @@ public class SimulacionControlador {
 
         Path archivo = Paths.get("resultados", "resultados_java.csv");
         guardarCsv(resultados, archivo);
+        Path parametros = Paths.get("resultados", "parametros_java.csv");
+        guardarParametros(parametros);
         Files.createDirectories(Paths.get("netlogo"));
         // Deja una copia del mismo CSV junto al modelo de NetLogo.
         Files.copy(archivo, Paths.get("netlogo", "resultados_java.csv"),
                 StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(parametros, Paths.get("netlogo", "parametros_java.csv"),
+                StandardCopyOption.REPLACE_EXISTING);
         new VistaConsola().mostrar(resultados, segundos);
+    }
+
+    // Exporta los parámetros usados para que NetLogo ejecute el mismo escenario.
+    private void guardarParametros(Path archivo) throws IOException {
+        Files.createDirectories(archivo.getParent());
+        try (BufferedWriter escritor = Files.newBufferedWriter(archivo, StandardCharsets.UTF_8)) {
+            escritor.write("poblacion,infectados_iniciales,beta,gamma,tiempo_maximo,semilla");
+            escritor.newLine();
+            escritor.write(SimulacionSIR.POBLACION + ","
+                    + SimulacionSIR.INFECTADOS_INICIALES + ","
+                    + SimulacionSIR.BETA + ","
+                    + SimulacionSIR.GAMMA + ","
+                    + SimulacionSIR.TIEMPO_SIMULACION + ","
+                    + SimulacionSIR.SEMILLA);
+            escritor.newLine();
+        }
     }
 
     // Escribe el encabezado y una fila de tiempo, S, I y R por cada registro.

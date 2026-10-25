@@ -1,0 +1,6 @@
+Preparación del informe: 24 de octubre de 2026 (America/Guayaquil)
+Código del modelo: commit 4430d89
+Java SIR: OpenJDK 27; compilación --release 11
+NetLogo: 7.0.4; runtime incluido OpenJDK 17.0.2
+Gráficas: Python 3.14.7, Matplotlib 3.11.2
+Compilación PDF: Tectonic 0.17.0
