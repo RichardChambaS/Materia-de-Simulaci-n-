@@ -8,8 +8,8 @@ import modelo.Persona.Estado;
 public class SimulacionSIR {
     // Valores de la ficha. Cada paso representa una unidad de tiempo.
     public static final int POBLACION = 100;
-    public static final int INFECTADOS_INICIALES = 5;
-    public static final double BETA = 0.30;
+    public static final int INFECTADOS_INICIALES = 10;
+    public static final double BETA = 0.50;
     public static final double GAMMA = 0.10;
     public static final int TIEMPO_SIMULACION = 100;
     public static final long SEMILLA = 42;
