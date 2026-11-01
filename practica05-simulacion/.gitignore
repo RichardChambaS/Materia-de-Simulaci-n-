@@ -1,0 +1,28 @@
+# Compilación de Java y caché de Python
+java/bin/
+*.class
+__pycache__/
+*.pyc
+.venv/
+
+# Resultados y archivos temporales (se generan al ejecutar)
+/resultados/
+/output/
+/tmp/
+.DS_Store
+Thumbs.db
+
+# Documentos académicos y sus archivos de edición
+*.pdf
+*.doc
+*.docx
+*.odt
+*.tex
+*.aux
+*.log
+*.zip
+
+# Configuración local de herramientas
+/.agents/
+/.codex/
+/.aws/
